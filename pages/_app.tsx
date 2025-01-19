@@ -6,10 +6,19 @@ import { Provider } from 'react-redux'
 import { store } from '@/store'
 import { useEffect, useState } from 'react'
 import { checkWallet } from '@/services/blockchain'
-import { SessionProvider } from 'next-auth/react'
 import  AuthProvider  from '@/components/AuthProvider'
+import { appWithTranslation } from "next-i18next";
+import { UserConfig } from "next-i18next";
+import nextI18NextConfig from "../next-i18next.config.js";
 
-export default function MyApp({ Component, pageProps }: AppProps) {
+const emptyInitialI18NextConfig: UserConfig = {
+  i18n: {
+    defaultLocale: nextI18NextConfig.i18n.defaultLocale,
+    locales: nextI18NextConfig.i18n.locales,
+  },
+};
+
+function MyApp({ Component, pageProps }: AppProps) {
   const [showChild, setShowChild] = useState<boolean>(false)
   
   useEffect(() => {
@@ -39,3 +48,5 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     
   )
 }
+
+export default appWithTranslation(MyApp, emptyInitialI18NextConfig);
