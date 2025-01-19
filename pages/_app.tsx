@@ -4,6 +4,9 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { Provider } from 'react-redux'
 import { store } from '@/store'
+import { useEffect, useState } from 'react'
+import { checkWallet } from '@/services/blockchain'
+import  AuthProvider  from '@/components/AuthProvider'
 import { appWithTranslation } from "next-i18next";
 import { UserConfig } from "next-i18next";
 import nextI18NextConfig from "../next-i18next.config.js";
@@ -16,8 +19,16 @@ const emptyInitialI18NextConfig: UserConfig = {
 };
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const [showChild, setShowChild] = useState<boolean>(false)
+  
+  useEffect(() => {
+    checkWallet()
+    setShowChild(true)
+  }, [])
   return (
+   
     <Provider store={store}>
+          <AuthProvider>
       <Component {...pageProps} />
 
       <ToastContainer
@@ -32,7 +43,8 @@ function MyApp({ Component, pageProps }: AppProps) {
         pauseOnHover
         theme="dark"
       />
-      </Provider>
+  </AuthProvider>
+      </Provider>  
     
   )
 }
